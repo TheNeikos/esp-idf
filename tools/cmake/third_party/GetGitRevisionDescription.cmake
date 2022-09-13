@@ -84,52 +84,7 @@ function(get_git_head_revision _refspecvar _hashvar _repo_dir)
 endfunction()
 
 function(git_describe _var _repo_dir)
-    if(NOT GIT_FOUND)
-        find_package(Git QUIET)
-    endif()
-    get_git_head_revision(refspec hash "${_repo_dir}")
-    if(NOT GIT_FOUND)
-        set(${_var} "GIT-NOTFOUND" PARENT_SCOPE)
-        return()
-    endif()
-    if(NOT hash)
-        set(${_var} "HEAD-HASH-NOTFOUND" PARENT_SCOPE)
-        return()
-
-    endif()
-
-    # TODO sanitize
-    #if((${ARGN}" MATCHES "&&") OR
-    #	(ARGN MATCHES "||") OR
-    #	(ARGN MATCHES "\\;"))
-    #	message("Please report the following error to the project!")
-    #	message(FATAL_ERROR "Looks like someone's doing something nefarious with git_describe! Passed arguments ${ARGN}")
-    #endif()
-
-    #message(STATUS "Arguments to execute_process: ${ARGN}")
-
-    execute_process(COMMAND
-        "${GIT_EXECUTABLE}"
-        "-C"
-        ${_repo_dir}
-        describe
-        "--always"
-        "--tags"
-        "--dirty"
-        ${ARGN}
-        WORKING_DIRECTORY
-        "${CMAKE_CURRENT_SOURCE_DIR}"
-        RESULT_VARIABLE
-        res
-        OUTPUT_VARIABLE
-        out
-        ERROR_QUIET
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-    if(NOT res EQUAL 0)
-        set(out "${out}-${res}-NOTFOUND")
-    endif()
-
-    set(${_var} "${out}" PARENT_SCOPE)
+    set(${_var} "v4.4.2" PARENT_SCOPE)
 endfunction()
 
 function(git_get_exact_tag _var _repo_dir)
